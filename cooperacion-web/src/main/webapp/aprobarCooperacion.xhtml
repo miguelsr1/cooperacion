@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Cooperación a Centros Educativos</title>
+    </h:head>
+
+    <h:body styleClass="login-body">
+        <h:form prependId="false">
+            <p:messages id="growl" closable="true" escape="false" showDetail="true">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div jsf:id="outPrincipal" class="login-panel p-grid">
+                <div class="p-col-12 logo-container">
+                    <h:panelGrid columns="2" style="width: 100%;">
+                        <h2>Cooperacion a Centros Educativos</h2>
+                        <p:graphicImage name="logo_mined_rpt.png" library="images" styleClass="login-icon" />
+                    </h:panelGrid>
+                </div>
+                <div class="p-col-12">
+                    <p:outputLabel for="txtUsuario" value="Correo" />
+                    <div class="p-grid">
+                        <div class="p-col-8">
+                            <p:inputText id="txtUsuario" placeholder="Usuario" style="width: 100%;" required="true" value="#{aprobarCapacitacionView.correoRemitente}"/>
+                        </div>
+                        <div class="p-col-4" >
+                            <p:outputLabel id="lblDominio" value="@admin.mined.edu.sv"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12">
+                    <p:outputLabel for="txtClaveRemitente" value="Contraseña"/>
+                    <div class="input-wrapper">
+                        <p:password id="txtClaveRemitente" widgetVar="txtClaveRemitente" value="#{aprobarCapacitacionView.password}" placeholder="Password" required="true"/>
+                        <p:graphicImage name="images/login/lock.png" library="paradise-layout"
+                                                styleClass="lock-icon"/>
+                    </div>
+                </div>
+                <div class="p-col-12">
+                    <br/>
+                </div>
+                <div class="p-col-12 " >
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <p:commandButton id="btnValidar" widgetVar="btnValidar" value="Validar" style="width: 110px;" 
+                                             action="#{aprobarCapacitacionView.validarCrendecialesDelCorreo()}" 
+                                             onclick="PF('btnValidar').disable();" 
+                                             oncomplete="PF('btnValidar').enable();" update="outPrincipal"/> 
+                        </div>
+                        <div class="p-col-6">
+                            <p:ajaxStatus style="float: right;">
+                                <f:facet name="default">
+                                </f:facet>
+
+                                <f:facet name="start">
+                                    <h:outputText value="Espere por favor" style="font-size: 14px;" />
+                                    <i class="fa fa-spinner fa-spin" style="font-size: 20px;"></i>
+                                </f:facet>
+
+                                <f:facet name="complete">
+                                    <h:outputText value="" />
+                                </f:facet>
+                            </p:ajaxStatus>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </h:body>
+
+    <h:outputStylesheet name="css/primeicons.css" library="paradise-layout" />
+    <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout" />
+    <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout" />
+
+
+</html>      

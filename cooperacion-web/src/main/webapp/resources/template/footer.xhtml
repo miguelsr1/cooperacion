@@ -1,0 +1,16 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <div class="layout-footer">
+        <p:graphicImage name="escudo_rpt.png" library="images" style="width: 24px !important;"/>
+        <div class="layout-footer-right">
+            <p:outputLabel value="version #{versionView.version}" />
+            <p:spacer width="10"/>
+            <p:outputLabel value="Ambiente #{versionView.ambiente}" />
+        </div>
+    </div>
+</ui:composition>

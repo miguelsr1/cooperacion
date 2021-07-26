@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings 
+    xmlns="http://java.sun.com/xml/ns/persistence/orm" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm  http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
+    version="2.0">
+    <description>Native queries</description>
+   
+    <named-native-query name="Cooperacion.MatrizProyecto" 
+                        result-class="sv.gob.mined.cooperacion.model.dto.MatrizProyectoDto">
+        <query>
+             <![CDATA[
+            select
+                id_proyecto     as idProyecto,
+                nombre_proyecto as nombreProyecto,
+                descripcion     as descripcion,
+                institucion     as institucion,
+                sector_intervencion     as sectorIntervencion,
+                descripcion_cooperacion as descripcionCooperacion,
+                descripcion_modalidad   as descripcionModalidad,
+                descripcion_objetivo    as descripcionObjetivo,
+                descripcion_meta        as descripcionMeta,
+                fecha_estimada_inicio   as fechaEstimadaInicio,
+                fecha_estimada_fin      as fechaEstimadaFin,
+                nombre_cooperante       as nombreCooperante,
+                monto_inversion         as montoInversion,
+                anho
+            from vw_matriz_proyecto
+            where anho = ?1
+            order by id_proyecto
+            ]]>
+        </query>    
+    </named-native-query>
+    
+    <named-native-query name="Cooperacion.AnhoProyecto" 
+                        result-class="sv.gob.mined.cooperacion.model.dto.AtributoValorDto">
+        <query>
+             <![CDATA[
+             select distinct 
+                anho as atributo, 
+                anho as valor
+            from proyecto_cooperacion 
+            order by to_number(anho)
+            ]]>
+        </query>    
+    </named-native-query>
+</entity-mappings>

@@ -1,0 +1,196 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="#{pageContext.servletContext.contextPath}/resources/template/plantilla.xhtml"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="head">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOZGfkDBXOJYiOY1ovS_alyW8YueD8hBg" type="text/javascript"></script>
+        <h:outputScript name="js/nanoscroller.js" library="paradise-layout" />
+        <h:outputScript name="js/layout.js" library="paradise-layout" />
+        <h:outputScript name="calendar-localization.js" library="js"/>
+
+        <style type="text/css">
+            .label {
+                width:20%;
+                padding:4px;
+            }
+            .value {
+                width:80%;
+                padding:4px;
+            }
+            .grid {
+                width:100%;
+            }
+            .error {
+                color: red;
+            }
+            .outputLabel {
+                font-weight: bold;
+            }
+            .grid {
+                width:33%;
+                padding:4px;
+            }
+            .ui-wizard-step-titles.ui-helper-reset.ui-helper-clearfix {
+                height: 80px;
+            }
+
+
+            .ui-fileupload-upload, .ui-fileupload-cancel, .ui-fileupload-progress{
+                display: none;
+            }
+            .ui-fileupload-buttonbar, .ui-fileupload-content{
+                float: left;
+
+            }
+            body .ui-fileupload .ui-fileupload-content {
+                border: 0px;
+            }
+            .ui-fileupload-files{
+                margin: 0;
+            }
+
+            body .ui-fileupload .ui-fileupload-buttonbar {
+                border: 0px;
+                padding: 0rem;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+            }
+
+            body .ui-fileupload .ui-fileupload-content {
+                display: none;
+            }
+        </style>
+
+    </ui:define>
+
+    <f:metadata>
+        <f:event listener="#{userBean.validarUsuario('CE')}" type="preRenderView" />
+    </f:metadata>
+
+    <ui:define name="contenido">
+        <p:breadCrumb>
+            <p:menuitem value="Inicio" url="../inicio.mined" />
+            <p:menuitem value="Mantenimientos" url="inicioManttos.mined" />
+            <p:menuitem value="Asociar meta ODS" url="#" />
+        </p:breadCrumb>
+        <br/>
+        <div class="p-grid crud-demo">
+            <div class="p-col-12">
+                <div class="card ui-fluid" jsf:id="divDatos">
+                    <div class="card-header">
+                        <h5>Datos del Proyecto</h5>
+                        <div id="order-tabs-container" class="order-tabs">
+                            <p:commandButton value="Seleccionar proyecto" icon="pi pi-link" action="#{asociarProyectoMetaView.buscarProyecto}" 
+                                             onclick="PF('dlgProyecto').show();" update="divDialog" process="@this" />
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="p-field p-grid">
+                        <p:outputLabel value="Nombre Organización:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
+                        <div class="p-col-12 p-md-10">
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon">
+                                    <i class="fa fa-building"></i>
+                                </span>
+                                <p:inputText value="#{asociarProyectoMetaView.proyectoCooperacion.idCooperante.nombreCooperante}" readonly="true"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-field p-grid">
+                        <p:outputLabel value="Proyecto" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
+                        <div class="p-col-12 p-md-10">
+                            <div class="ui-inputgroup">
+                                <span class="ui-inputgroup-addon">
+                                    <i class="pi pi-tag"></i>
+                                </span>
+                                <p:inputText value="#{asociarProyectoMetaView.proyectoCooperacion.nombreProyecto}" readonly="true" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-field p-grid">
+                        <p:outputLabel value="Objetivo de Desarrollo:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
+                        <div class="p-col-12 p-md-10">
+                            <p:selectOneMenu id="cboObjetivo" value="#{asociarProyectoMetaView.idObjetivo}" style="width: 100%;">
+                                <f:selectItem itemValue="null" itemLabel="Seleccione un valor"/>
+                                <f:selectItems value="#{asociarProyectoMetaView.objetivosDesarrollo}" var="obj" itemValue="#{obj.idObjetivo}" itemLabel="#{obj.descripcionObjetivo}"/>
+                                <p:ajax update="cboMeta"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="p-field p-grid">
+                        <p:outputLabel value="Meta ODS:" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0"/>
+                        <div class="p-col-12 p-md-10">
+                            <p:selectOneMenu id="cboMeta" value="#{asociarProyectoMetaView.idMeta}">
+                                <f:selectItem itemValue="null" itemLabel="Seleccione un valor"/>
+                                <f:selectItems value="#{asociarProyectoMetaView.meta}" var="meta" itemValue="#{meta.idMeta}" itemLabel="#{meta.descripcionMeta}"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+
+                    <br/>
+                    <div class="p-field p-grid">
+                        <div class="p-col-12 p-md-2">
+                            <p:commandButton value="Guardar" action="#{asociarProyectoMetaView.guardar}" icon="pi pi-save" />
+                        </div>
+                        <div class="p-col-12 p-md-2">
+                            <p:commandButton value="Cancelar" icon="pi pi-ban" process="@this" action="inicioManttos.mined?faces-redirect=true"/>
+                        </div>
+                    </div>
+                </div>
+
+                <p:dialog id="dlgProyecto" widgetVar="dlgProyecto" modal="true" closable="true" width="1000" height="500">
+                    <h5>Listado de Proyectos</h5>
+
+                    <p:outputPanel id="divDialog">
+                        <h:panelGrid columns="5">
+                            <p:outputLabel value="Cooperante: "/>
+                            <p:selectOneMenu value="#{listadoView.idCooperante}">
+                                <f:selectItem itemValue="0" itemLabel="TODOS LOS COOPERANTES"/>
+                                <f:selectItems value="#{listadoView.lstCooperantePorProyecto}" var="coo" itemValue="#{coo.idCooperante}" itemLabel="#{coo.nombreCooperante}" />
+                                <p:ajax listener="#{listadoView.recuperarLstProyectosPorCooperante()}"  />
+                            </p:selectOneMenu>
+                            <p:spacer width="20"/>
+                            <p:outputLabel value="Año: "/>
+                            <p:selectOneMenu value="#{listadoView.anho}">
+                                <f:selectItem itemValue="0" itemLabel="TODOS LOS AÑOS"/>
+                                <f:selectItems value="#{listadoView.lstAnhosProyectos}" var="anho" itemValue="#{anho.atributo}" itemLabel="#{anho.valor}" />
+                                <p:ajax listener="#{listadoView.recuperarLstProyectosPorCooperante()}" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <p:dataTable value="#{asociarProyectoMetaView.lstProyectos}" var="proyecto" paginator="true" paginatorPosition="top" rows="10"
+                                     selection="#{asociarProyectoMetaView.proyectoCooperacion}" selectionMode="single" rowKey="#{proyecto.idProyecto}">
+                            <p:ajax update="divDatos" event="rowSelect" listener="#{asociarProyectoMetaView.proyectoSelect}" oncomplete="PF('dlgProyecto').hide();"/>
+                            <p:column headerText="Id" width="10">
+                                <h:outputText value="#{proyecto.idProyecto}"/>
+                            </p:column>
+                            <p:column headerText="Organización">
+                                <h:outputText value="#{proyecto.idCooperante.nombreCooperante}"/>
+                            </p:column>
+                            <p:column headerText="Beneficiario" width="250">
+                                <h:outputText value="#{proyecto.codigoEntidad}"/>
+                            </p:column>
+                            <p:column headerText="Modalidad" width="300">
+                                <h:outputText value="#{proyecto.idModalidad.descripcionModalidad}"/>
+                            </p:column>
+                            <p:column headerText="Proyecto" width="300">
+                                <h:outputText value="#{proyecto.nombreProyecto}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+                </p:dialog>
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/demo.css" library="demo" />
+        <h:outputStylesheet name="css/nanoscroller.css" library="paradise-layout" />
+    </ui:define>    
+</ui:composition>

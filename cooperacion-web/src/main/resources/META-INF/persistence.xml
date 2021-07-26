@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="cooperacionPU" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>java:/CooperacionDS</jta-data-source>
+    <mapping-file>META-INF/nativeQueries.xml</mapping-file>
+    <class>sv.gob.mined.cooperacion.model.Director</class>
+    <class>sv.gob.mined.cooperacion.model.Cooperante</class>
+    <class>sv.gob.mined.cooperacion.model.TipoCooperacion</class>
+    <class>sv.gob.mined.cooperacion.model.TipoInstrumento</class>
+    <class>sv.gob.mined.cooperacion.model.TipoCooperante</class>
+    <class>sv.gob.mined.cooperacion.model.ProyectoCooperacion</class>
+    <class>sv.gob.mined.cooperacion.model.EeGeoMunicipio</class>
+    <class>sv.gob.mined.cooperacion.model.ModalidadEjecucion</class>
+    <class>sv.gob.mined.cooperacion.model.GeoEntidadEducativa</class>
+    <class>sv.gob.mined.cooperacion.model.EeGeoDepartamento</class>
+    <class>sv.gob.mined.cooperacion.model.dto.ListadoProyectoDto</class>
+    <class>sv.gob.mined.cooperacion.model.HisCambioEstadoPro</class>
+    <class>sv.gob.mined.cooperacion.model.Notificacion</class>
+    <class>sv.gob.mined.cooperacion.model.Usuario</class>
+    <class>sv.gob.mined.cooperacion.model.UsuarioOrg</class>
+    <class>sv.gob.mined.cooperacion.model.FechaCapacitacion</class>
+    <class>sv.gob.mined.cooperacion.model.DatoInfraCe</class>
+    <class>sv.gob.mined.cooperacion.model.dto.AtributoValorDto</class>
+    <class>sv.gob.mined.cooperacion.model.dto.MatrizProyectoDto</class>
+    <class>sv.gob.mined.cooperacion.model.Meta</class>
+    <class>sv.gob.mined.cooperacion.model.ObjetivoDesarrollo</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="eclipselink.cache.shared.default" value="false"/>
+      <property name="eclipselink.target-database" value="Oracle"/>
+      <property name="eclipselink.target-server" value="JBoss"/>
+      <property name="eclipselink.archive.factory" value="org.jipijapa.eclipselink.JBossArchiveFactoryImpl"/>
+    </properties>
+  </persistence-unit>
+  <persistence-unit name="paquetePU" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>java:/PaqueteDS</jta-data-source>
+    <class>sv.gob.mined.cooperacion.model.paquete.Departamento</class>
+    <class>sv.gob.mined.cooperacion.model.paquete.Municipio</class>
+    <class>sv.gob.mined.cooperacion.model.paquete.VwCatalogoEntidadEducativa</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+  </persistence-unit>
+</persistence>

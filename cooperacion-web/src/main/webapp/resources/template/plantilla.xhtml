@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="en">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <link href="#{request.contextPath}/resources/images/favicon.png" rel="shortcut icon"/>
+        </f:facet>
+        <title><ui:insert name="title">Cooperación a C.E.</ui:insert></title>
+        <h:outputScript name="js/nanoscroller.js" library="paradise-layout" />
+        <h:outputScript name="js/layout.js" library="paradise-layout" />
+        <ui:insert name="head"/>
+
+        <style>
+            body .ui-menu.ui-menubar {
+                padding: 0rem;
+                background: #f8f9fa;
+                border-radius: 4px;
+            }
+
+            .layout-content .content-section {
+                padding: 2rem;
+                padding-bottom: 2rem;
+            }
+
+            .layout-content .content-section.introduction {
+                background-color: var(--surface-b);
+                color: var(--text-color);
+                padding-bottom: 0;
+                display: flex;
+                justify-content: space-between;
+            }
+            .layout-content .content-section.introduction {
+                color: var(--text-color);
+            }
+            .layout-content .content-section.implementation {
+                background-color: var(--surface-b);
+                color: var(--text-color);
+            }
+            .pageColumnMid{
+                float : left;
+                vertical-align: middle !important;
+                clear : none;
+                height: 82px;
+                padding-left: 60px;
+            }
+            body .ui-widget-overlay {
+                background-color: #424242;
+                opacity: 0.3;
+                filter: alpha(opacity=70);
+            }
+        </style>
+    </h:head>
+
+    <h:body styleClass="#{guestPreferences.inputStyleClass}" style="max-width: 1200px; margin: 0 auto; ">
+        <div class="layout-wrapper #{guestPreferences.menuMode} " style="background-color: white !important">
+            <ui:include src="./topbar.xhtml" />
+
+            <div class="layout-main">
+
+                <div class="layout-content">
+                    <h:form id="frmPrincipal" prependId="false" >
+                        <ui:insert name="contenido"/>
+                    </h:form>
+                </div>
+
+                <ui:include src="./footer.xhtml" />
+            </div>        
+        </div>
+
+        <p:ajaxStatus style="position:fixed;right:60px;bottom:30px">
+            <f:facet name="default">
+                <h:outputText value=""/>
+            </f:facet>
+            <f:facet name="start">
+                <div id="div_modal" class="layout-content ui-widget-overlay ui-dialog-mask" ></div>
+                <div id="ajax_gif" class="ui-tooltip-text ui-corner-all " style="z-index: 1000;">
+                    <i class="fa fa-refresh fa-spin ajax-loader" aria-hidden="true" 
+                       style="color: #ffffff; font-size: 30px; position: relative;  bottom: -18%;  transform: translateY(-18%);"></i>
+                </div>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value=""/>
+            </f:facet>
+        </p:ajaxStatus>
+        <div class="layout-mask modal-in"></div>
+        <h:outputStylesheet name="main.css" library="css"/>
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/demo.css" library="demo" />
+
+        <h:outputStylesheet name="css/nanoscroller.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout" />
+    </h:body>
+
+</html>

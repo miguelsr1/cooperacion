@@ -1,0 +1,340 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="#{pageContext.servletContext.contextPath}/resources/template/plantilla.xhtml"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="head">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOZGfkDBXOJYiOY1ovS_alyW8YueD8hBg" type="text/javascript"></script>
+        <h:outputScript name="js/nanoscroller.js" library="paradise-layout" />
+        <h:outputScript name="js/layout.js" library="paradise-layout" />
+        <h:outputScript name="calendar-localization.js" library="js"/>
+
+        <style type="text/css">
+            .label {
+                width:20%;
+                padding:4px;
+            }
+            .value {
+                width:80%;
+                padding:4px;
+            }
+            .grid {
+                width:100%;
+            }
+            .error {
+                color: red;
+            }
+            .outputLabel {
+                font-weight: bold;
+            }
+            .grid {
+                width:33%;
+                padding:4px;
+            }
+            .ui-wizard-step-titles.ui-helper-reset.ui-helper-clearfix {
+                height: 80px;
+            }
+
+            body .ui-chkbox {
+                display: inline-block;
+                vertical-align: middle;
+                margin: 0;
+                width: 0r !important;
+                height: 0r !important; 
+            }
+
+            .filaCabecera {
+                background: #dee4e9;
+            }
+
+            .leyenda.blue > i {
+                background-color: rgba(57, 132, 184, 0.3);
+                color: #3984b8;
+            }
+            .leyenda > i {
+                padding: 6px;
+                font-size: 16px;
+                background-color: rgba(57, 132, 184, 0.3);
+                color: #3984b8;
+                border-radius: 4px;
+                height: 28px;
+                width: 28px;
+            }
+
+            .value {
+                width: 1000px;
+            }
+        </style>
+    </ui:define>
+
+
+    <ui:define name="contenido">
+        <p:growl id="messages" escape="false" showDetail="true" showSummary="true">
+            <p:autoUpdate />
+        </p:growl>
+
+        <div class="card revenue-graph" style="display:#{(infodView.codigoBueno)?'block':'none'}">
+            <h5 class="leyenda">
+                <i class="pi pi-folder"></i>
+                <p:spacer width="5"/>
+                Datos del Proyecto de Cooperación
+            </h5>
+            <div class="p-grid dashboard invoice-to">
+                <div class="p-col-12 p-xl-6">
+                    <div class="p-formgroup-inline ">
+                        <div class="p-field">
+                            <p:outputLabel value="Nombre del Proyecto: "/>
+                            <p:outputLabel value="#{infodView.proyecto.nombreProyecto}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Modalidad de Ejec.:" />
+                            <p:outputLabel value="#{infodView.proyecto.idModalidad.descripcionModalidad}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Instrumento de formalización:" />
+                            <p:outputLabel value="#{infodView.proyecto.idTipoInstrumento.descripcionInstrumento}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <p:outputLabel  value="Objetivo de la Cooperación:"/>
+                            <br/>
+                            <p:outputLabel value="#{infodView.proyecto.objetivos}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Fecha estimada Inicio:" />
+                            <p:outputLabel value="#{infodView.proyecto.fechaEstimadaInicio}" style="font-weight: bold">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel value="Fecha estimada Fin:"/>
+                            <p:outputLabel value="#{infodView.proyecto.fechaEstimadaFin}" style="font-weight: bold">
+                                <f:convertDateTime pattern="dd/MM/yyyy/"/>
+                            </p:outputLabel>
+                        </div>
+                    </div>
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Tipo de Cooperación:" />
+                            <p:outputLabel value="#{infodView.proyecto.idTipoCooperacion.descripcionCooperacion}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Descrip. de la Cooperación:" />
+                            <p:outputLabel value="#{infodView.proyecto.descripcion}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+                    <h:panelGrid style="width: 100%;" columns="3" columnClasses="col4,col4,col4" rowClasses="filaCabecera,null">
+                        <p:outputLabel value="Cantidad a Cubrir:"/>
+                        <p:outputLabel value="Monto a Invertir:" />
+                        <p:outputLabel value="Cantidad Beneficiarios:"/>
+                        <p:outputLabel value="#{infodView.proyecto.cantidad}" style="font-weight: bold">
+                            <f:convertNumber pattern="#,##0"/>
+                        </p:outputLabel>
+                        <p:outputLabel value="#{infodView.proyecto.montoInversion}" style="font-weight: bold">
+                            <f:convertNumber pattern="#,##0.00"/>
+                        </p:outputLabel>                            
+                        <p:outputLabel value="#{infodView.proyecto.cantidadBeneficiarios}" style="font-weight: bold">
+                            <f:convertNumber pattern="#,##0"/>
+                        </p:outputLabel>
+                    </h:panelGrid>
+                </div>
+
+                <div class="p-col-12 p-xl-6">
+                    <h:panelGrid style="width: 100%;" columns="1">
+                        <p:outputLabel value="Tipos Beneficiarios" />
+                        <h:panelGrid columns="3" style="width: 100%">
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infodView.proyecto.inicial eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Inicial"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infodView.proyecto.inicial eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Parvularia"/>
+                            </p:outputPanel>
+                            <p:spacer width="10"/>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infodView.proyecto.basicaCi eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Básica-Ciclo I"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infodView.proyecto.basicaCii eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Básica-Ciclo II"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infodView.proyecto.basicaCiii eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Básica-Ciclo III"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infodView.proyecto.media eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Media"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infodView.proyecto.docente eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Docente"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infodView.proyecto.otros eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Otros"/>
+                            </p:outputPanel>
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <p:dataTable class="invoice-to" value="#{infodView.lstArchivos}" var="archivo">
+                        <p:column headerText="Nombre">
+                            <p:outputLabel value="#{archivo.nombreArchivo}"/>
+                        </p:column>
+                        <p:column headerText="# Pág." width="40" style="text-align: center;">
+                            <p:outputLabel value="#{archivo.numeroPaginas}"/>
+                        </p:column>
+                        <p:column width="20">   
+                            <h:commandLink styleClass="rounded-button blue" style="font-weight:bold">
+                                <i class="pi pi-download"></i>
+                                <f:setPropertyActionListener value="#{archivo.nombreArchivo}" target="#{infodView.nombreArchivo}" />
+                                <p:fileDownload contentDisposition="inline" value="#{infodView.file}"/>
+                            </h:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </div>
+        <div jsf:id="dvBotones" class="card" style="display:#{(infodView.codigoBueno)?'block':'none'}">
+            <div class="products-buttonbar">
+                <div style="width: 100%">
+                    <p:commandButton value="Cambiar estado" icon="pi pi-check" onclick="PF('dlgCambioEstado').show();" process="@this"
+                                     disabled="#{infodView.proyectoAprobado}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="Agregar evento" icon="pi pi-calendar-plus" onclick="PF('addEvent').show();" process="@this" 
+                                     styleClass="success-button" disabled="#{not infodView.proyectoAprobado}"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton value="Guardar fechas" icon="pi pi-save" action="#{infodView.guardar}" styleClass="info-button" 
+                                     disabled="#{not infodView.proyectoAprobado}" process="@this"/>
+                    <p:spacer width="10"/>
+                    <p:commandButton id="btnNotificar" value="Notificar al C.E." icon="pi pi-envelope" styleClass="help-button" action="#{infodView.notificarAprobacionCe()}" process="@this,btnNotificar" disabled="#{not infodView.proyectoAprobado}"/>
+                </div>
+            </div>
+            <div >
+                <br/>
+                <h5 class="leyenda">
+                    <i class="pi pi-list"></i>
+                    <p:spacer width="5"/>
+                    Fechas de capacitación
+                </h5>
+
+                <p:dataTable id="tblFechas" value="#{infodView.lstFechasProyecto}" var="fecha" rowIndexVar="rowId">
+                    <p:column headerText="#" width="30" style="text-align: center">
+                        <h:outputText value="#{rowId + 1}" />
+                    </p:column>
+                    <p:column headerText="Fecha inicio">
+                        <p:outputLabel value="#{fecha.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm a"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Fecha fin">
+                        <p:outputLabel value="#{fecha.fechaFin}">
+                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm a"/>
+                        </p:outputLabel>
+                    </p:column>
+                </p:dataTable>
+
+            </div>
+        </div>
+
+        <div class="card" style="text-align: center !important;display:#{(!infodView.codigoBueno)?'block':'none'}">
+            <div class="exception-panel">
+                <div class="exception-panel-content">
+                    <p:graphicImage name="images/exception/access-icon.png" library="paradise-layout" />
+                    <h1>Acceso denegado</h1>
+                    <p>Error en la URL de acceso al proyecto.</p>
+                </div>
+                <br/>
+            </div>
+        </div>
+
+        <p:dialog widgetVar="addEvent" header="Agendar día de Capacitación" showEffect="clip" 
+                  hideEffect="clip" resizable="false" draggable="false" modal="true" width="800" height="500">
+            <h:panelGrid columnClasses="value">
+                <p:schedule id="myschedule" value="#{infodView.eventModel}" widgetVar="myschedule" >
+                    <p:ajax event="dateSelect" listener="#{infodView.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    <p:ajax event="eventSelect" listener="#{infodView.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                    <p:ajax event="eventMove" listener="#{infodView.onEventMove}" update="messages" />
+                    <p:ajax event="eventResize" listener="#{infodView.onEventResize}" update="messages" />
+                </p:schedule>
+            </h:panelGrid>
+        </p:dialog>  
+
+        <p:dialog  widgetVar="eventDialog" header="Detalle de la Capacitación" showEffect="fade" width="350" responsive="true">
+            <p:outputPanel id="eventDetails" styleClass="ui-fluid">
+                <div class="p-field">
+                    <p:outputLabel for="title" value="Título" />
+                    <p:inputText id="title" value="#{infodView.event.title}" required="false" />
+                </div>
+                <div class="p-field">
+                    <p:outputLabel for="from" value="Desde" />
+                    <p:datePicker id="from" value="#{infodView.event.startDate}" pattern="dd/MM/yyyy hh:mm a" showTime="true" appendTo="@(body)"  />
+                </div>
+                <div class="p-field">
+                    <p:outputLabel for="to" value="Hasta" />
+                    <p:datePicker id="to" value="#{infodView.event.endDate}" pattern="dd/MM/yyyy hh:mm a" showTime="true" appendTo="@(body)" mindate="#{infodView.event.startDate}" />
+                </div>
+                <div class="p-field">
+                    <p:outputLabel for="lugar" value="Lugar" />
+                    <p:inputText id="lugar" value="#{infodView.event.description}" required="false" />
+                </div>
+            </p:outputPanel>
+            <f:facet name="footer">
+                <p:commandButton id="addButton" value="Guardar" action="#{infodView.agregarEvento}" icon="pi pi-check" 
+                                 update="eventDetails tblFechas" oncomplete="PF('myschedule').update();" process=""
+                                 validateClient="true"/>
+                <p:commandButton type="reset" value="Reset" styleClass="secondary-button" icon="pi pi-refresh" disabled="#{infodView.disable}"/>
+                <p:spacer width="20"/>
+                <p:commandButton id="deleteButton" value="Eliminar" icon="pi pi-trash" action="#{infodView.eliminarEvento}" oncomplete="PF('mySchedule').update();PF('eventDialog').hide();" disabled="#{infodView.disable}"/>
+            </f:facet>
+        </p:dialog>   
+
+        <p:dialog id="dlgCambioEstado" widgetVar="dlgCambioEstado" header="Cambiar estado" showEffect="clip" 
+                  hideEffect="clip" resizable="false" draggable="false" modal="true" width="500" height="190">
+            <p:outputPanel id="pnlCambioEstado" styleClass="ui-fluid">
+                <div class="p-field">
+                    <p:outputLabel value="Estado" />
+                    <p:selectOneMenu id="cboEstado" value="#{infodView.proyecto.idEstado}">
+                        <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="true"/>
+                        <f:selectItem itemValue="1" itemLabel="Digitado"/>
+                        <f:selectItem itemValue="2" itemLabel="Aprobado"/>
+                        <f:selectItem itemValue="3" itemLabel="Observado"/>
+                        <f:selectItem itemValue="4" itemLabel="Denegado"/>
+                    </p:selectOneMenu>
+                </div>
+                <div class="p-field">
+                    <p:outputLabel value="Observación" />
+                    <p:inputTextarea id="txaObservacion" value="#{infodView.observacion}" />
+                </div>                
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" action="#{infodView.guardarCambioEstado()}" icon="pi pi-check" oncomplete="PF('dlgCambioEstado').hide();" 
+                                 update="dvBotones" process="@this,cboEstado, txaObservacion"/>
+                <p:commandButton value="Cancelar" onclick="PF('dlgCambioEstado').hide();"/>
+            </f:facet>
+        </p:dialog>   
+
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/demo.css" library="demo" />
+        <h:outputStylesheet name="css/nanoscroller.css" library="paradise-layout" />
+    </ui:define>    
+</ui:composition>

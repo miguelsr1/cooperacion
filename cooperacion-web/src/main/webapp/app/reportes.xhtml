@@ -1,0 +1,50 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="#{pageContext.servletContext.contextPath}/resources/template/plantilla.xhtml"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="head">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOZGfkDBXOJYiOY1ovS_alyW8YueD8hBg" type="text/javascript"></script>
+        <h:outputScript name="js/nanoscroller.js" library="paradise-layout" />
+        <h:outputScript name="js/layout.js" library="paradise-layout" />
+        <h:outputScript name="calendar-localization.js" library="js"/>
+    </ui:define>
+
+
+    <ui:define name="contenido">
+        <p:breadCrumb>
+            <p:menuitem value="Inicio" url="inicio.mined" />
+            <p:menuitem value="Reportes" url="#" />
+        </p:breadCrumb>
+        <br/>
+        <div class="p-grid crud-demo">
+            <div class="p-col-12">
+                <div class="card ui-fluid " >
+                    <div class="p-col-6 p-md-4 p-xl-3" style="margin: 0 auto;" onclick="location.href = 'datosCe.mined';" >
+                        <div class="card overview-box" >
+                            <p:commandButton value="Matriz Proyectos" ajax="false" action="#{reportesView.generarMatrizProyecto()}" />
+                            <br/><br/>
+                            <p:commandButton value="Resumen Fuentes de Finan. " ajax="false"  />
+                            <br/><br/>
+                            <p:commandButton value="Detalle cooperación" ajax="false"  />
+                            <br/><br/>
+                            <p:commandButton value="Consolidado etapas de proyectos" ajax="false" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <h:outputStylesheet name="personalizadas.css" library="css"/>
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
+        <h:outputStylesheet name="css/demo.css" library="demo"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout"/>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,273 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="#{pageContext.servletContext.contextPath}/resources/template/plantilla.xhtml"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="head">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOZGfkDBXOJYiOY1ovS_alyW8YueD8hBg" type="text/javascript"></script>
+        <h:outputScript name="js/nanoscroller.js" library="paradise-layout" />
+        <h:outputScript name="js/layout.js" library="paradise-layout" />
+        <h:outputScript name="calendar-localization.js" library="js"/>
+
+        <style type="text/css">
+            .label {
+                width:20%;
+                padding:4px;
+            }
+            .value {
+                width:80%;
+                padding:4px;
+            }
+            .grid {
+                width:100%;
+            }
+            .error {
+                color: red;
+            }
+            .outputLabel {
+                font-weight: bold;
+            }
+            .grid {
+                width:33%;
+                padding:4px;
+            }
+            .ui-wizard-step-titles.ui-helper-reset.ui-helper-clearfix {
+                height: 80px;
+            }
+
+            body .ui-chkbox {
+                display: inline-block;
+                vertical-align: middle;
+                margin: 0;
+                width: 0r !important;
+                height: 0r !important; 
+            }
+
+            .filaCabecera {
+                background: #dee4e9;
+            }
+
+            .leyenda.blue > i {
+                background-color: rgba(57, 132, 184, 0.3);
+                color: #3984b8;
+            }
+            .leyenda > i {
+                padding: 6px;
+                font-size: 16px;
+                background-color: rgba(57, 132, 184, 0.3);
+                color: #3984b8;
+                border-radius: 4px;
+                height: 28px;
+                width: 28px;
+            }
+
+            .value {
+                width: 1000px;
+            }
+        </style>
+    </ui:define>
+
+
+    <ui:define name="contenido">
+        <p:growl id="messages" escape="false" showDetail="true">
+            <p:autoUpdate />
+        </p:growl>
+
+        <div class="card revenue-graph" style="display:#{(infraView.codigoBueno)?'block':'none'}">
+            <div class="p-grid" jsf:id="dvPrincipal">
+                <div class="p-col-12 p-md-7">
+                    <h5 class="leyenda">
+                        <i class="pi pi-folder"></i>
+                        <p:spacer width="5"/>
+                        Datos del Proyecto de Cooperación</h5>
+                    <div class="p-formgroup-inline invoice-to">
+                        <div class="p-field">
+                            <p:outputLabel value="Nombre del Proyecto: "/>
+                            <p:outputLabel value="#{infraView.proyecto.nombreProyecto}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Modalidad de Ejec.:" />
+                            <p:outputLabel value="#{infraView.proyecto.idModalidad.descripcionModalidad}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Instrumento de formalización:" />
+                            <p:outputLabel value="#{infraView.proyecto.idTipoInstrumento.descripcionInstrumento}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <p:outputLabel  value="Objetivo de la Cooperación:"/>
+                            <br/>
+                            <p:outputLabel value="#{infraView.proyecto.objetivos}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Fecha estimada Inicio:" />
+                            <p:outputLabel value="#{infraView.proyecto.fechaEstimadaInicio}" style="font-weight: bold">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                        </div>
+                        <div class="p-field">
+                            <p:outputLabel value="Fecha estimada Fin:"/>
+                            <p:outputLabel value="#{infraView.proyecto.fechaEstimadaFin}" style="font-weight: bold">
+                                <f:convertDateTime pattern="dd/MM/yyyy/"/>
+                            </p:outputLabel>
+                        </div>
+                    </div>
+
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Tipo de Cooperación:" />
+                            <p:outputLabel value="#{infraView.proyecto.idTipoCooperacion.descripcionCooperacion}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+                    <div class="p-formgroup-inline">
+                        <div class="p-field">
+                            <p:outputLabel value="Descrip. de la Cooperación:" />
+                            <p:outputLabel value="#{infraView.proyecto.descripcion}" style="font-weight: bold"/>
+                        </div>
+                    </div>
+                    <h:panelGrid style="width: 100%;" columns="3" columnClasses="col4,col4,col4" rowClasses="filaCabecera,null">
+                        <p:outputLabel value="Cantidad a Cubrir:"/>
+                        <p:outputLabel value="Monto a Invertir:" />
+                        <p:outputLabel value="Cantidad Beneficiarios:"/>
+                        <p:outputLabel value="#{infraView.proyecto.cantidad}" style="font-weight: bold">
+                            <f:convertNumber pattern="#,##0"/>
+                        </p:outputLabel>
+                        <p:outputLabel value="#{infraView.proyecto.montoInversion}" style="font-weight: bold">
+                            <f:convertNumber pattern="#,##0.00"/>
+                        </p:outputLabel>                            
+                        <p:outputLabel value="#{infraView.proyecto.cantidadBeneficiarios}" style="font-weight: bold">
+                            <f:convertNumber pattern="#,##0"/>
+                        </p:outputLabel>
+                    </h:panelGrid>
+
+                    <h:panelGrid style="width: 100%;" columns="2" columnClasses="col3,col9">
+                        <p:outputLabel value="Tipos Beneficiarios" />
+                        <h:panelGrid columns="3" style="width: 100%">
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infraView.proyecto.inicial eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Inicial"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infraView.proyecto.inicial eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Parvularia"/>
+                            </p:outputPanel>
+                            <p:spacer width="10"/>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infraView.proyecto.basicaCi eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Básica-Ciclo I"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infraView.proyecto.basicaCii eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Básica-Ciclo II"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infraView.proyecto.basicaCiii eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Básica-Ciclo III"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infraView.proyecto.media eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Media"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infraView.proyecto.docente eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Docente"/>
+                            </p:outputPanel>
+                            <p:outputPanel>
+                                <p:selectBooleanCheckbox value="#{infraView.proyecto.otros eq 1}" disabled="true"/><p:spacer width="5"/>
+                                <p:outputLabel value="Otros"/>
+                            </p:outputPanel>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </div>
+                <div class="p-col-12 p-md-5" jsf:id="pnlObservacion" >
+                    <h5 class="leyenda">
+                        <i class="pi pi-list" style="color: #3984b8"></i>
+                        <p:spacer width="5"/>
+                        Listado de Archivos
+                    </h5>
+                    <p:dataTable class="invoice-to" value="#{infraView.lstArchivos}" var="archivo">
+                        <p:column headerText="Nombre">
+                            <p:outputLabel value="#{archivo.nombreArchivo}"/>
+                        </p:column>
+                        <p:column headerText="# Pág." width="40" style="text-align: center;">
+                            <p:outputLabel value="#{archivo.numeroPaginas}"/>
+                        </p:column>
+                        <p:column width="20">   
+                            <h:commandLink styleClass="rounded-button blue" style="font-weight:bold">
+                                <i class="pi pi-download"></i>
+                                <f:setPropertyActionListener value="#{archivo.nombreArchivo}" target="#{infraView.nombreArchivo}" />
+                                <p:fileDownload contentDisposition="inline" value="#{infraView.file}" />
+                            </h:commandLink>
+                        </p:column>
+                    </p:dataTable>
+
+                    <br/>
+
+                    <h5 class="leyenda">
+                        <i class="pi pi-refresh"></i>
+                        <p:spacer width="5"/>
+                        Actualizar</h5>
+                    <div class="p-field p-grid invoice-to">
+                        <p:outputLabel styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Cambiar estado:</p:outputLabel>
+                        <div class="p-col-12 p-md-8">
+                            <p:selectOneMenu id="cboEstado" value="#{infraView.proyecto.idEstado}">
+                                <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="true"/>
+                                <f:selectItem itemValue="1" itemLabel="Digitado"/>
+                                <f:selectItem itemValue="2" itemLabel="Aprobado"/>
+                                <f:selectItem itemValue="3" itemLabel="Observado"/>
+                                <f:selectItem itemValue="4" itemLabel="Denegado"/>
+                                <p:ajax update="pnlObservacion" process="@this"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <div class="p-field p-grid invoice-to" style="display:#{(infraView.proyecto.idEstado eq 3)?'flex':'none'}">
+                        <p:outputLabel styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Tipo de observación:</p:outputLabel>
+                        <div class="p-col-12 p-md-8">
+                            <p:selectOneMenu value="#{infraView.idTipoObservacion}">
+                                <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="true"/>
+                                <f:selectItem itemValue="1" itemLabel="Falta carpeta técnica"/>
+                                <f:selectItem itemValue="2" itemLabel="Se necesita visita ténica"/>
+                            </p:selectOneMenu>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="p-field p-grid invoice-to p-jc-center">
+                        <p:commandButton id="addButton" value="Guardar" icon="pi pi-check" action="#{infraView.notificarRespuestaCe()}"
+                                         disabled="#{infraView.deshabilitarGuardar}" update="dvPrincipal"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="text-align: center !important;display:#{(!infraView.codigoBueno)?'block':'none'}">
+            <div class="exception-panel">
+                <div class="exception-panel-content">
+                    <p:graphicImage name="images/exception/access-icon.png" library="paradise-layout" />
+                    <h1>Acceso denegado</h1>
+                    <p>Error en la URL de acceso al proyecto.</p>
+                </div>
+                <br/>
+            </div>
+        </div> 
+
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/demo.css" library="demo" />
+        <h:outputStylesheet name="css/nanoscroller.css" library="paradise-layout" />
+    </ui:define>    
+</ui:composition>

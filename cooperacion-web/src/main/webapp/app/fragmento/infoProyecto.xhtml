@@ -1,0 +1,205 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html">
+
+    <p:outputPanel id="manage-product-content" class="ui-fluid">
+        <div class="p-grid">
+            <div class="p-col-12 p-md-7">
+                <h5 class="leyenda">
+                    <i class="pi pi-folder"></i>
+                    <p:spacer width="5"/>
+                    Datos del Proyecto de Cooperación</h5>
+                <div class="p-formgroup-inline invoice-to">
+                    <div class="p-field">
+                        <p:outputLabel value="Nombre del Proyecto: "/>
+                        <p:outputLabel value="#{listadoView.proyecto.nombreProyecto}" style="font-weight: bold"/>
+                    </div>
+                </div>
+
+                <div class="p-formgroup-inline">
+                    <div class="p-field">
+                        <p:outputLabel value="Modalidad de Ejec.:" />
+                        <p:outputLabel value="#{listadoView.proyecto.idModalidad.descripcionModalidad}" style="font-weight: bold"/>
+                    </div>
+                </div>
+                <div class="p-formgroup-inline">
+                    <div class="p-field">
+                        <p:outputLabel value="Instrumento de formalización:" />
+                        <p:outputLabel value="#{listadoView.proyecto.idTipoInstrumento.descripcionInstrumento}" style="font-weight: bold"/>
+                    </div>
+                </div>
+
+                <div class="p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <p:outputLabel  value="Objetivo de la Cooperación:"/>
+                        <br/>
+                        <p:outputLabel value="#{listadoView.proyecto.objetivos}" style="font-weight: bold"/>
+                    </div>
+                </div>
+
+                <div class="p-formgroup-inline">
+                    <div class="p-field">
+                        <p:outputLabel value="Fecha estimada Inicio:" />
+                        <p:outputLabel value="#{listadoView.proyecto.fechaEstimadaInicio}" style="font-weight: bold">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+                    </div>
+                    <div class="p-field">
+                        <p:outputLabel value="Fecha estimada Fin:"/>
+                        <p:outputLabel value="#{listadoView.proyecto.fechaEstimadaFin}" style="font-weight: bold">
+                            <f:convertDateTime pattern="dd/MM/yyyy/"/>
+                        </p:outputLabel>
+                    </div>
+                </div>
+
+                <div class="p-formgroup-inline">
+                    <div class="p-field">
+                        <p:outputLabel value="Tipo de Cooperación:" />
+                        <p:outputLabel value="#{listadoView.proyecto.idTipoCooperacion.descripcionCooperacion}" style="font-weight: bold"/>
+                    </div>
+                </div>
+                <div class="p-formgroup-inline">
+                    <div class="p-field">
+                        <p:outputLabel value="Descrip. de la Cooperación:" />
+                        <p:outputLabel value="#{listadoView.proyecto.descripcion}" style="font-weight: bold"/>
+                    </div>
+                </div>
+                <h:panelGrid style="width: 100%;" columns="3" columnClasses="col4,col4,col4" rowClasses="filaCabecera,null">
+                    <p:outputLabel value="Cantidad a Cubrir:"/>
+                    <p:outputLabel value="Monto a Invertir:" />
+                    <p:outputLabel value="Cantidad Beneficiarios:"/>
+                    <p:outputLabel value="#{listadoView.proyecto.cantidad}" style="font-weight: bold">
+                        <f:convertNumber pattern="#,##0"/>
+                    </p:outputLabel>
+                    <p:outputLabel value="#{listadoView.proyecto.montoInversion}" style="font-weight: bold">
+                        <f:convertNumber pattern="#,##0.00"/>
+                    </p:outputLabel>                            
+                    <p:outputLabel value="#{listadoView.proyecto.cantidadBeneficiarios}" style="font-weight: bold">
+                        <f:convertNumber pattern="#,##0"/>
+                    </p:outputLabel>
+                </h:panelGrid>
+
+                <h:panelGrid style="width: 100%;" columns="2" columnClasses="col3,col9">
+                    <p:outputLabel value="Tipos Beneficiarios" />
+                    <h:panelGrid columns="3" style="width: 100%">
+                        <p:outputPanel>
+                            <p:selectBooleanCheckbox value="#{listadoView.proyecto.inicial eq 1}" disabled="true"/><p:spacer width="5"/>
+                            <p:outputLabel value="Inicial"/>
+                        </p:outputPanel>
+                        <p:outputPanel>
+                            <p:selectBooleanCheckbox value="#{listadoView.proyecto.inicial eq 1}" disabled="true"/><p:spacer width="5"/>
+                            <p:outputLabel value="Parvularia"/>
+                        </p:outputPanel>
+                        <p:spacer width="10"/>
+                        <p:outputPanel>
+                            <p:selectBooleanCheckbox value="#{listadoView.proyecto.basicaCi eq 1}" disabled="true"/><p:spacer width="5"/>
+                            <p:outputLabel value="Básica-Ciclo I"/>
+                        </p:outputPanel>
+                        <p:outputPanel>
+                            <p:selectBooleanCheckbox value="#{listadoView.proyecto.basicaCii eq 1}" disabled="true"/><p:spacer width="5"/>
+                            <p:outputLabel value="Básica-Ciclo II"/>
+                        </p:outputPanel>
+                        <p:outputPanel>
+                            <p:selectBooleanCheckbox value="#{listadoView.proyecto.basicaCiii eq 1}" disabled="true"/><p:spacer width="5"/>
+                            <p:outputLabel value="Básica-Ciclo III"/>
+                        </p:outputPanel>
+                        <p:outputPanel>
+                            <p:selectBooleanCheckbox value="#{listadoView.proyecto.media eq 1}" disabled="true"/><p:spacer width="5"/>
+                            <p:outputLabel value="Media"/>
+                        </p:outputPanel>
+                        <p:outputPanel>
+                            <p:selectBooleanCheckbox value="#{listadoView.proyecto.docente eq 1}" disabled="true"/><p:spacer width="5"/>
+                            <p:outputLabel value="Docente"/>
+                        </p:outputPanel>
+                        <p:outputPanel>
+                            <p:selectBooleanCheckbox value="#{listadoView.proyecto.otros eq 1}" disabled="true"/><p:spacer width="5"/>
+                            <p:outputLabel value="Otros"/>
+                        </p:outputPanel>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </div>
+            <div class="p-col-12 p-md-5" >
+                <h:panelGrid columns="3" style="width: 100%;">
+                    <p:outputPanel>
+                        <h5 class="leyenda">
+                            <i class="pi pi-list" style="color: #3984b8"></i>
+                            <p:spacer width="5"/>
+                            Listado de Archivos
+                        </h5>
+                    </p:outputPanel>
+
+                    <p:ajaxStatus >
+                        <f:facet name="default">
+                            <i class="fa fa-refresh fa-spin ajax-loader" aria-hidden="true" 
+                               style="font-size: 30px; "></i>
+                        </f:facet>
+                        <f:facet name="start">
+                            <i class="fa fa-refresh fa-spin ajax-loader" aria-hidden="true" 
+                               style="font-size: 30px; "></i>
+                        </f:facet>
+
+                        <f:facet name="complete">
+                            <h:outputText value=""/>
+                        </f:facet>
+                    </p:ajaxStatus>
+                    <p:fileUpload mode="simple" skinSimple="true" style="float: right;" label="Seleccionar" auto="true" 
+                                  disabled="#{listadoView.proyecto.idEstado eq 2}"
+                                  listener="#{listadoView.handleFileUpload}" update="tblArchivos" multiple="true"
+                                  rendered="#{userBean.centroEscolar}" process="@this" fileLimit="20000000" 
+                                  invalidSizeMessage="El tamaño máximo por archivo es 20MB"/>
+                </h:panelGrid>
+
+                <p:dataTable id="tblArchivos" class="invoice-to" value="#{listadoView.lstArchivos}" var="archivo">
+                    <p:column headerText="Nombre">
+                        <p:outputLabel value="#{archivo.nombreArchivo}"/>
+                    </p:column>
+                    <p:column headerText="# Pág." width="40" style="text-align: center;">
+                        <p:outputLabel value="#{archivo.numeroPaginas}"/>
+                    </p:column>
+                    <p:column width="20">   
+                        <h:commandLink styleClass="rounded-button blue" style="font-weight:bold">
+                            <i class="pi pi-download"></i>
+                            <f:setPropertyActionListener value="#{archivo.nombreArchivo}" target="#{listadoView.nombreArchivo}" />
+                            <p:fileDownload contentDisposition="inline" value="#{listadoView.file}" />
+                        </h:commandLink>
+                    </p:column>
+                </p:dataTable>
+
+                <br/>
+                <br/>
+
+                <h5 class="leyenda">
+                    <i class="pi pi-refresh"></i>
+                    <p:spacer width="5"/>
+                    Actualizar</h5>
+                <div class="p-field p-grid invoice-to">
+                    <p:outputLabel styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Cambiar estado:</p:outputLabel>
+                    <div class="p-col-12 p-md-8">
+                        <p:selectOneMenu value="#{listadoView.proyecto.idEstado}" disabled="#{(userBean.centroEscolar)?'true':'false'}">
+                            <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="true"/>
+                            <f:selectItem itemValue="1" itemLabel="Digitado"/>
+                            <f:selectItem itemValue="2" itemLabel="Aprobado"/>
+                            <f:selectItem itemValue="3" itemLabel="Observado"/>
+                            <f:selectItem itemValue="4" itemLabel="Denegado"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                <div class="p-field p-grid invoice-to">
+                    <p:outputLabel styleClass="p-col-12 p-mb-4 p-md-4 p-mb-md-0">Etapa de ejecución:</p:outputLabel>
+                    <div class="p-col-12 p-md-8">
+                        <p:selectOneMenu value="#{listadoView.proyecto.idEtapaEjecucion}">
+                            <f:selectItem itemLabel="Seleccione un valor" noSelectionOption="true"/>
+                            <f:selectItem itemValue="1" itemLabel="No iniciado"/>
+                            <f:selectItem itemValue="2" itemLabel="En Ejecución"/>
+                            <f:selectItem itemValue="3" itemLabel="Finalizado"/>
+                            <f:selectItem itemValue="4" itemLabel="Suspendido"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p:outputPanel>
+</ui:composition>

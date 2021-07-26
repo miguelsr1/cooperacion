@@ -1,0 +1,35 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/paradise">
+
+    <div class="topbar">
+        <div class="topbar-wrapper">
+            <div class="topbar-left">
+                <h:link id="logolink"  styleClass="topbar-logo">
+                    <p:graphicImage name="escudo_rpt.png" style="border: 0px;" library="images" />
+                </h:link>
+                <a href="#" id="menu-button">
+                    <i class="pi pi-bars"></i>
+                </a>
+
+                <div class="pageColumnMid" style="text-align: left;">
+                    <br/><p:outputLabel style="font-size: 20px; " value="Ministerio de Educación, Ciencia y Tecnología"/>
+                    <br/><p:outputLabel style="font-size: 14px; " value="Cooperación a Centros Educativos"/>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div id="user-display" style="padding-top: 1px; text-align: right;">
+                    <h:form>
+                        <p:commandLink action="#{guestPreferences.logout()}">
+                            <i class="pi pi pi-fw pi-power-off" style="font-size: 18px;" />
+                        </p:commandLink>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </div>
+</ui:composition>

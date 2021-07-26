@@ -1,0 +1,356 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    template="#{pageContext.servletContext.contextPath}/resources/template/plantilla.xhtml"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <ui:define name="head">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOZGfkDBXOJYiOY1ovS_alyW8YueD8hBg" type="text/javascript"></script>
+        <h:outputScript name="js/nanoscroller.js" library="paradise-layout" />
+        <h:outputScript name="js/layout.js" library="paradise-layout" />
+        <h:outputScript name="calendar-localization.js" library="js"/>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".first").keyup(function () {
+                    $(".second").val($(".first").val());
+
+                    $('.second').keyup();
+                });
+            });
+        </script>
+
+        <style type="text/css">
+            .label {
+                width:20%;
+                padding:4px;
+            }
+            .value {
+                width:80%;
+                padding:4px;
+            }
+            .grid {
+                width:100%;
+            }
+            .error {
+                color: red;
+            }
+            .outputLabel {
+                font-weight: bold;
+            }
+            .grid {
+                width:33%;
+                padding:4px;
+            }
+            .ui-wizard-step-titles.ui-helper-reset.ui-helper-clearfix {
+                height: 80px;
+            }
+
+            body .ui-chkbox {
+                display: inline-block;
+                vertical-align: middle;
+                margin: 0;
+                width: 0r !important;
+                height: 0r !important; 
+            }
+
+            .filaCabecera {
+                background: #dee4e9;
+            }
+
+            .leyenda.blue > i {
+                background-color: rgba(57, 132, 184, 0.3);
+                color: #3984b8;
+            }
+            .leyenda > i {
+                padding: 6px;
+                font-size: 16px;
+                background-color: rgba(57, 132, 184, 0.3);
+                color: #3984b8;
+                border-radius: 4px;
+                height: 28px;
+                width: 28px;
+            }
+
+            body .ui-datatable .ui-datatable-header {
+                background: #F8F9FA;
+                border: 1px solid rgba(57, 132, 184, 0.1);
+                border-top-width: 1px;
+                border-right-width: 1px;
+                border-bottom-width: 1px;
+                border-left-width: 1px;
+                border-width: 0 0 1px 0;
+                color: #64686A;
+                padding: 0rem;
+                font-weight: 700;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+            }
+            .ui-dialog {
+                width: 90% !important;
+/*                height: 95% !important*/
+            }
+            .ui-fileupload-filename{
+                display: none;
+            }
+        </style>
+    </ui:define>
+
+
+    <ui:define name="contenido">
+        <p:messages id="messages" closable="true" escape="false" >
+            <p:autoUpdate />
+        </p:messages>
+
+        <p:breadCrumb>
+            <p:menuitem value="Inicio" url="inicio.mined" />
+            <p:menuitem value="Listado de Proyectos" url="#" />
+        </p:breadCrumb>
+        <br/>
+
+        <div class="p-grid crud-demo">
+            <div class="p-col">
+                <div class="card" style="display:#{!(userBean.centroEscolar)?'block':'none'}">
+                    <h5>Filtro de busqueda</h5>
+                    <div class="products-buttonbar invoice-to">
+                        <div jsf:id="divFiltros">
+                            <div class="ui-fluid">
+                                <div class="p-field p-grid">
+                                    <p:outputLabel for="cboDepa" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Departamento</p:outputLabel>
+                                    <div class="p-col-12 p-md-4">
+                                        <p:selectOneMenu id="cboDepa" value="#{listadoView.codigoDepartamento}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione un valor"/>
+                                            <f:selectItems value="#{ubicacionView.lstDepartamentos}" var="depa" itemValue="#{depa.codigoDepartamento}" itemLabel="#{depa.codigoDepartamento} - #{depa.nombreDepartamento}" />
+                                            <p:ajax listener="#{listadoView.recuperarMunicipios}" update="cboMuni tblProyectos"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <p:outputLabel for="cboMuni" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Municipio</p:outputLabel>
+                                    <div class="p-col-12 p-md-4">
+                                        <p:selectOneMenu id="cboMuni" value="#{listadoView.idMunicipio}">
+                                            <f:selectItem itemLabel="Seleccione un valor"/>
+                                            <f:selectItems value="#{listadoView.lstMunicipio}" var="mun" itemValue="#{mun.idMunicipio}" itemLabel="#{mun.codigoMunicipio} - #{mun.nombreMunicipio}"/>
+                                            <p:ajax listener="#{listadoView.recuperarLstProyectos()}" update="tblProyectos" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="p-field p-grid">
+                                    <p:outputLabel for="cboEstado" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Estado</p:outputLabel>
+                                    <div class="p-col-12 p-md-4">
+                                        <p:selectOneMenu id="cboEstado" value="#{listadoView.idEstado}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione un valor"/>
+                                            <f:selectItem itemValue="1" itemLabel="DIGITADO"/>
+                                            <f:selectItem itemValue="2" itemLabel="APROBADO"/>
+                                            <f:selectItem itemValue="3" itemLabel="DENEGADO"/>
+                                            <p:ajax listener="#{listadoView.recuperarLstProyectos()}" update="tblProyectos" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="p-field p-grid">
+                                    <p:outputLabel for="cboTipoCooperacion" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Tipo de Cooperación</p:outputLabel>
+                                    <div class="p-col-12 p-md-4">
+                                        <p:selectOneMenu id="cboTipoCooperacion" value="#{listadoView.idTipoCooperacion}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione un valor"/>
+                                            <f:selectItems value="#{listadoView.lstTipoCooperaciones}" var="tipo" itemValue="#{tipo.idTipoCooperacion}" itemLabel="#{tipo.descripcionCooperacion}" />
+                                            <p:ajax listener="#{listadoView.recuperarLstProyectos()}" update="tblProyectos" />
+                                        </p:selectOneMenu>
+                                    </div>
+
+                                </div>
+                                <div class="p-field p-grid">
+                                    <p:outputLabel for="cboCooperante" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Cooperante</p:outputLabel>
+                                    <div class="p-col-12 p-md-10">
+                                        <p:selectOneMenu id="cboCooperante" value="#{listadoView.idCooperante}">
+                                            <f:selectItem itemValue="0" itemLabel="Seleccione un valor"/>
+                                            <f:selectItems value="#{listadoView.lstCooperantes}" var="coo" itemValue="#{coo.idCooperante}" itemLabel="#{coo.nombreCooperante}" />
+                                            <p:ajax listener="#{listadoView.recuperarLstProyectos()}" update="tblProyectos" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="p-field p-grid">
+                                    <p:outputLabel for="globalF" styleClass="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nombre proyecto</p:outputLabel>
+                                    <div class="p-col-12 p-md-10">
+                                        <p:inputText id="globalF" class="first" style="width:300px" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Listado</h5>
+                        <div id="order-tabs-container" class="order-tabs">
+                            <p:commandButton value="Ver" style="float: right" icon="pi pi-map-marker"
+                                             action="#{listadoView.agregarPuntos}"
+                                             styleClass="edit-button rounded-button success-button"
+                                             onclick="PF('dlgMap').show();" update="mapa" process="@this"/>
+                        </div>
+                    </div>
+                    <div class="invoice-to">
+                        <p:dataTable id="tblProyectos" value="#{listadoView.lstProyectos}" var="proyecto" reflow="true" styleClass="fixed-size"
+                                     filteredValue="#{listadoView.lstProyectosFiltrados}" rowKey="#{proyecto.idRow}"
+                                     globalFilterFunction="#{listadoView.globalFilterFunction}" widgetVar="tblProyectos">
+
+                            <f:facet name="header">
+                                <p:panel visible="false">
+                                    <p:inputText id="globalFilter" class="second" onkeyup="PF('tblProyectos').filter()" style="width:300px" />
+                                </p:panel>
+                            </f:facet>
+
+                            <p:column headerText="Código C.E." width="50" filterable="false">
+                                <h:outputText value="#{proyecto.codigoEntidad}"/>
+                            </p:column>
+                            <p:column headerText="Nombre C.E." filterable="false">
+                                <h:outputText value="#{proyecto.nombreCe}"/>
+                            </p:column>
+                            <p:column headerText="Ubicación" filterable="false">
+                                <h:outputText value="#{proyecto.nombreMunicipio}, #{proyecto.nombreDepartamento}"/>
+                            </p:column>
+                            <p:column headerText="Nombre Director" rendered="false" filterable="false">
+                                <h:outputText value="#{proyecto.nombreDirector}"/>
+                            </p:column>
+                            <p:column headerText="Correo Director" rendered="false" filterable="false">
+                                <h:outputText value="#{proyecto.correoElectronico}"/>
+                            </p:column>
+                            <p:column headerText="Nombre Proyecto" filterable="true" filterBy="#{proyecto.nombreProyecto}" filterMatchMode="contains">
+                                <h:outputText value="#{proyecto.nombreProyecto}"/>
+                            </p:column>
+                            <p:column headerText="Fecha Inicio" width="70" filterable="false">
+                                <h:outputText value="#{proyecto.fechaInicio}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Fecha Fin" width="70" filterable="false">
+                                <h:outputText value="#{proyecto.fechaFin}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Estado" width="100" filterable="false">
+                                <h:outputText value="#{proyecto.idEstado eq 1 ? 'DIGITADO' : (proyecto.idEstado eq 2 ? 'APROBADO': (proyecto.idEstado eq 3?'OBSERVADO':'DENEGADO'))}"/>
+                            </p:column>
+                            <p:column width="30" filterable="false">
+                                <p:commandButton icon="pi pi-eye" update="manage-product-content" action="#{listadoView.buscarProyecto}"
+                                                 oncomplete="PF('manageProductDialog').show()"
+                                                 styleClass="warning-button rounded-button" process="@this">
+                                    <f:setPropertyActionListener value="#{proyecto}" target="#{listadoView.proyectoDto}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <p:dialog header="Información" width="1150" showEffect="fade" modal="true" widgetVar="manageProductDialog" responsive="true">
+            <ui:include src="/app/fragmento/infoProyecto.xhtml"/>
+
+            <f:facet name="footer">
+                <p:commandButton value="Aceptar" icon="pi pi-check" onclick="PF('manageProductDialog').hide()" 
+                                 styleClass="primary-button text-button" process="@this"/>
+                <p:commandButton value="Guardar" icon="pi pi-save"  action="#{listadoView.guardarCambioDeEtapa}" disabled="#{listadoView.proyecto.idEstado eq 2}"
+                                 styleClass="primary-button text-button" process="@this" rendered="#{userBean.perfilUsuario ne 'UT'}"/>
+            </f:facet>
+        </p:dialog> 
+
+        <p:dialog id="dlgMap" widgetVar="dlgMap" header="Ubicación del Centro Educativo"  modal="true" style="height: 95% !important">
+            <h:panelGrid columns="5">
+                <p:outputLabel value="Cooperante: "/>
+                <p:selectOneMenu value="#{listadoView.idCooperante}">
+                    <f:selectItem itemValue="0" itemLabel="TODOS LOS COOPERANTES"/>
+                    <f:selectItems value="#{listadoView.lstCooperantePorProyecto}" var="coo" itemValue="#{coo.idCooperante}" itemLabel="#{coo.nombreCooperante}" />
+                    <p:ajax listener="#{listadoView.recuperarLstProyectosPorCooperante()}" update="mapa" />
+                </p:selectOneMenu>
+                <p:spacer width="20"/>
+                <p:outputLabel value="Año: "/>
+                <p:selectOneMenu value="#{listadoView.anho}">
+                    <f:selectItem itemValue="0" itemLabel="TODOS LOS AÑOS"/>
+                    <f:selectItems value="#{listadoView.lstAnhosProyectos}" var="anho" itemValue="#{anho.atributo}" itemLabel="#{anho.valor}" />
+                    <p:ajax listener="#{listadoView.recuperarLstProyectosPorCooperante()}" update="mapa" />
+                </p:selectOneMenu>
+            </h:panelGrid>
+            <p:gmap id="mapa" center="#{listadoView.posicionInicial}" zoom="9" type="ROADMAP" style="width: 100%; height: 75vh;" 
+                    model="#{listadoView.simpleModel}" mapTypeControl="false" >
+                <p:ajax event="overlaySelect" listener="#{listadoView.onMarkerSelect}" />
+
+                <p:gmapInfoWindow id="infoWindow">
+
+                    <div class="invoice-to" jsf:id="pnlDatosCe">
+                        <div class="ui-fluid">
+                            <div class="p-field p-grid">
+                                <p:outputLabel for="txtCodEnt" value="Código infraestructura:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <h:outputText id="txtCodEnt" value="#{listadoView.entidadEducativa.codigoEntidad}"/>
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Nombre:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <h:outputText id="txtNombreCe" value="#{listadoView.entidadEducativa.nombre}" />
+                                </div>
+                            </div>
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Dirección:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <h:outputText id="txtDireccion" value="#{listadoView.entidadEducativa.direccion}" />
+                                </div>
+                            </div>
+
+                            <div class="p-field p-grid">
+                                <p:outputLabel value="Departamento:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:selectOneMenu id="cboDepartamento" value="#{listadoView.entidadEducativa.codigoDepartamento}" disabled="true">
+                                        <f:selectItem itemValue="0" itemLabel="Seleccione un valor"/>
+                                        <f:selectItems value="#{registrarCooperacionView.lstDepartamentos}" var="depa" itemValue="#{depa.codigoDepartamento}" itemLabel="#{depa.codigoDepartamento} - #{depa.nombreDepartamento}" />
+                                    </p:selectOneMenu>
+                                </div>
+                                <p:outputLabel value="Municipio:" styleClass="p-col-12 p-mb-3 p-md-3 p-mb-md-0"/>
+                                <div class="p-col-12 p-md-9">
+                                    <p:selectOneMenu id="cboMunicipio" value="#{listadoView.entidadEducativa.codigoMunicipio}" disabled="true">
+                                        <f:selectItem itemValue="0" itemLabel="Seleccione un valor"/>
+                                        <f:selectItems value="#{listadoView.lstMunicipio}" var="mun" itemValue="#{mun.codigoMunicipio}" itemLabel="#{mun.codigoMunicipio} - #{mun.nombreMunicipio}"/>
+                                    </p:selectOneMenu>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <p:dataTable value="#{listadoView.lstProyectoCooperacion}" var="pro">
+                        <p:column headerText="Id" width="10">
+                            <h:outputText value="#{pro.idProyecto}"/>
+                        </p:column>
+                        <p:column headerText="Cooperante">
+                            <h:outputText value="#{pro.idCooperante.nombreCooperante}"/>
+                        </p:column>
+                        <p:column headerText="Monto" width="100">
+                            <h:outputText value="#{pro.montoInversion}">
+                                <f:convertNumber pattern="#,##0.00"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Año" width="50">
+                            <h:outputText value="#{pro.anho}"/>
+                        </p:column>
+                        <p:column width="30" headerText="Ver">
+                            <p:commandButton icon="pi pi-eye" update="manage-product-content" action="#{listadoView.buscarProyecto}"
+                                             oncomplete="PF('manageProductDialog').show()"
+                                             styleClass="warning-button rounded-button" process="@this">
+                                <f:setPropertyActionListener value="#{pro}" target="#{listadoView.proyecto}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:gmapInfoWindow>
+            </p:gmap>
+
+        </p:dialog>
+
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/demo.css" library="demo" />
+        <h:outputStylesheet name="css/nanoscroller.css" library="paradise-layout" />
+    </ui:define>    
+</ui:composition>
