@@ -53,7 +53,7 @@ public class FechaCapacitacion implements Serializable {
     @Column(name = "ESTADO_ELIMINACION")
     private Short estadoEliminacion;
     @JoinColumn(name = "ID_PROYECTO", referencedColumnName = "ID_PROYECTO")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private ProyectoCooperacion idProyecto;
 
     @Column(name = "TITULO")

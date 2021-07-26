@@ -36,7 +36,7 @@ public class UsuarioOrg implements Serializable {
     @Column(name = "DESCRIPCION")
     private String descripcion;
     @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Usuario idUsuario;
 
     public UsuarioOrg() {

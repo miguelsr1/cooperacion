@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -429,13 +430,29 @@ public class InfodView implements Serializable {
         sb.append(tblInicio);
 
         lstFechasProyecto.forEach((fechaCapa) -> {
+            int dias = 0;
+            long noOfDaysBetween = ChronoUnit.DAYS.between(fechaCapa.getFechaInicio().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate(), fechaCapa.getFechaFin().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate()) + 1;
 
-            if (StringUtils.getFechaFormat(fechaCapa.getFechaInicio()).equals(StringUtils.getFechaFormat(fechaCapa.getFechaFin()))) {
+            if (noOfDaysBetween > 1) {
+                do {
+                    sb.append(MessageFormat.format(tblDetalle,
+                            sdf.format(Date.from(fechaCapa.getFechaInicio().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate().plusDays(dias).atStartOfDay(ZoneId.systemDefault()).toInstant())), 
+                            sdfHora.format(fechaCapa.getFechaInicio()),
+                            sdfHora.format(fechaCapa.getFechaFin()), fechaCapa.getLugar()));
+                    dias++;
+                } while (dias < noOfDaysBetween);
+            } else if (StringUtils.getFechaFormat(fechaCapa.getFechaInicio()).equals(StringUtils.getFechaFormat(fechaCapa.getFechaFin()))) {
                 sb.append(MessageFormat.format(tblDetalle,
                         sdf.format(fechaCapa.getFechaInicio()), sdfHora.format(fechaCapa.getFechaInicio()),
                         sdfHora.format(fechaCapa.getFechaFin()), fechaCapa.getLugar()));
             } else {
-                
+
             }
         });
         sb.append(tblFin);

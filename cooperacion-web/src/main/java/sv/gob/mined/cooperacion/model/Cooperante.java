@@ -53,7 +53,7 @@ public class Cooperante implements Serializable {
     @Column(name = "CORREO")
     private String correo;
     @JoinColumn(name = "ID_TIPO_COOPERANTE", referencedColumnName = "ID_TIPO_COOPERANTE")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TipoCooperante idTipoCooperante;
     
     @Column(name = "NOMBRE_ASISTENTE")

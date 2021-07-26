@@ -42,7 +42,7 @@ public class Meta implements Serializable {
     @Column(name = "CODIGO_META")
     private String codigoMeta;
     @JoinColumn(name = "ID_OBJETIVO", referencedColumnName = "ID_OBJETIVO")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ObjetivoDesarrollo idObjetivo;
 
     public Meta() {

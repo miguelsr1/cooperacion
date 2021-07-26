@@ -92,7 +92,7 @@
             }
             .ui-dialog {
                 width: 90% !important;
-/*                height: 95% !important*/
+                /*                height: 95% !important*/
             }
             .ui-fileupload-filename{
                 display: none;
@@ -194,7 +194,8 @@
                     <div class="invoice-to">
                         <p:dataTable id="tblProyectos" value="#{listadoView.lstProyectos}" var="proyecto" reflow="true" styleClass="fixed-size"
                                      filteredValue="#{listadoView.lstProyectosFiltrados}" rowKey="#{proyecto.idRow}"
-                                     globalFilterFunction="#{listadoView.globalFilterFunction}" widgetVar="tblProyectos">
+                                     globalFilterFunction="#{listadoView.globalFilterFunction}" widgetVar="tblProyectos" paginator="true"
+                                     paginatorPosition="top" rows="20">
 
                             <f:facet name="header">
                                 <p:panel visible="false">
